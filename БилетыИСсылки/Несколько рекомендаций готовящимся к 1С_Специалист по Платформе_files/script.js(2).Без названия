@@ -1,0 +1,460 @@
+var LOCK_MESSENGER = false;
+
+BX.ready(function(){
+    BX.addCustomEvent("onPullEvent", function(module_id,command,params) {
+
+        if(module_id == 'im'){
+            if(command == 'message') {
+
+                    var curUID = $("#inf-messenger").attr('data-uid');
+                    var InOut = ($("#inf-messenger").attr('data-uid') == params.MESSAGE.senderId) ? true : false;
+                if(!INF_MESSENGER_MIN) {
+                    if ($(".inf-user-wrap[data-uid=" + (InOut ? params.MESSAGE.recipientId : params.MESSAGE.senderId) + "]").hasClass('active')) {
+                        $(".inf-message-list").append('<div class="inf-message-wrap" data-id="' + params.MESSAGE.id + '">' +
+                        '<div class="message-' + (InOut ? 'out' : 'in') + '">' +
+                        '<span class="message-body">' + params.MESSAGE.text + '</span>' +
+                        '<span class="message-date">' + params.MESSAGE.params.FORMAT_DATE + '</span>' +
+                        '   </div>' +
+                        '</div>');
+                        $(".inf-content-chat").scrollTop($(".inf-content-chat").scrollTop() + 1000);
+                        $.get('?ACTION=SET_READ_MESSAGE&sessid=' + BX.bitrix_sessid() + '&uid=' + params.MESSAGE.senderId, function () {
+                        });
+                    } else {
+                        $('.inf-get-user-message.inf-user-wrap:first').before($(".inf-user-wrap[data-uid=" + (InOut ? params.MESSAGE.recipientId : params.MESSAGE.senderId) + "]").addClass('new'));
+                    }
+
+
+                    $(".inf-user-wrap[data-uid="+(InOut?params.MESSAGE.recipientId:params.MESSAGE.senderId)+"]").addClass('online').find('.user-last-message').html(params.MESSAGE.text).next('.inf-user-data').find('.data-date').text(params.MESSAGE.params.FORMAT_DATE_MIN);
+                }else if(InOut == false){
+                    $("#main-left-menu a[href*=connect] .badge").remove();
+					$("#TAB_MESSAGE").attr("data-loaded", "false")
+					if ($(".TAB_MESSAGE").is(':visible')){
+						$("#TAB_MESSAGE").click()
+					}
+					$("#TAB_MESSAGE").attr("data-loaded", "false")
+                    if($("#NotifyCounter em").length > 0 && !isNaN(parseInt($("#NotifyCounter em").html(),10))) {
+
+                    	var  CNT = (parseInt($("#NotifyCounter em").html(), 10) + 1)
+                        $("#NotifyCounter em").html(CNT);
+
+                        var data = $("title").html().replace(/(\([0-9]+\))/, '');
+                        $("title").html('('+ CNT +') '+data);
+
+                        $("#main-left-menu a[href*=connect]").prepend('<span class="badge pull-right inbox-badge bg-color-red badge-menu-level-1">+'+ CNT +'</span>');
+						$("#MESSAGE_COUNTER").html(CNT)
+                    }else {
+                        $("#NotifyCounter em").remove();
+                        $("#NotifyCounter").append('<em>1</em>');
+                        var data = $("title").html().replace(/(\([0-9]+\))/, '');
+                        $("title").html('(1) '+data);
+                        $("#main-left-menu a[href*=connect]").prepend('<span class="badge pull-right inbox-badge bg-color-red badge-menu-level-1">+1</span>');
+						$("#MESSAGE_COUNTER").html('1')
+                    }
+                }
+
+                if (("Notification" in window) && InOut == false){
+                    if(Notification.permission == 'granted') {
+                        $.each(params.USERS, function (id, arUser) {
+                            if (id == params.MESSAGE.senderId) {
+                                if (arUser.avatar == '/bitrix/js/im/images/blank.gif')
+                                    arUser.avatar = '/bitrix/templates/adaptive/img/NoAvatar.gif';
+                                var notification = new Notification(arUser.name, {
+                                    body: params.MESSAGE.text,
+                                    icon: arUser.avatar,
+                                    dir: 'auto',
+                                    tag: 'infmessage'
+                                });
+                                notification.onshow = function () {
+                                    setTimeout(function () {
+                                        notification.close();
+                                    }, 5000);
+                                };
+                                /*var audio = new Audio('http://infostart.ru/bitrix/components/infostart/messenger/templates/.default/sound/notify.mp3');
+                                audio.play();*/
+                            }
+                        });
+                    }
+                }
+
+
+            }else if(command == 'readMessageApponent'){
+                if(!INF_MESSENGER_MIN) {
+                    if ($(".inf-user-wrap[data-uid=" + params.userId + "]").hasClass('active')) {
+                        $(".inf-message-list .inf-message-wrap:not(.seen) .message-out").parent('.inf-message-wrap').addClass('seen');
+                    }
+                }
+            }else if(command == 'readMessage'){
+                if(INF_MESSENGER_MIN) {
+                    $("#main-left-menu a[href*=connect] .badge").remove();
+                    if($("#NotifyCounter em").length > 0){
+                        var cnt = parseInt($("#NotifyCounter em").html(),10);
+                        if(isNaN(cnt))
+                            cnt = 0;
+                        if(cnt <= params.count){
+                            $("#NotifyCounter em").remove();
+                            var data = $("title").html().replace(/(\([0-9]+\))/, '');
+                            $("title").html(data);
+                        }else{
+                            $("#NotifyCounter em").html(cnt-params.count);
+                            var data = $("title").html().replace(/(\([0-9]+\))/, '');
+                            $("title").html('('+(cnt-params.count)+') '+data);
+                        }
+                    }
+                }
+            }else if(command == 'notify'){
+                if ($(".inf-user-wrap[data-uid=0]").hasClass('active')) {
+                    $.get('?ACTION=LAST_MESSAGE&sessid=' + BX.bitrix_sessid() + '&uid=0', function (data) {
+                        var arResult = $.parseJSON(data);
+                        $('.inf-content-chat .inf-message-list').removeClass('active').html(arResult.HTML);
+                        $('.inf-content-chat').scrollTop(Number.MAX_SAFE_INTEGER);
+                    });
+                }
+
+				$("#TAB_NOTIFY").attr("data-loaded", "false")
+				if ($(".TAB_NOTIFY").is(':visible')){
+					$("#TAB_NOTIFY").click()
+				}
+                if(INF_MESSENGER_MIN) {
+                    if ($("#MessageCounter em").length > 0 ) {
+                        var new_val = parseInt($("#MessageCounter em").html(), 10) + 1;
+                        $("#MessageCounter em").html(new_val);
+                        $("#MenuNotifyCount .badge").html(new_val);
+                    }else {
+                        $("#MessageCounter ").append('<em>1</em>');
+                        $("#MenuNotifyCount ").prepend('<span class="badge pull-right inbox-badge bg-color-red badge-menu-level-1">1</span>');
+                    }
+                    $("#MessageCounter i").addClass('bell');
+
+					$("#NOTIFY_COUNTER").html($("#MessageCounter em").html())
+                }
+            }else if(command == 'notifyReadAll'){
+                if(INF_MESSENGER_MIN) {
+                    $("#MessageCounter em").remove();
+                    $("#MenuNotifyCount .badge").remove();
+                    $("#MessageCounter i").removeClass('bell');
+                }
+            }
+        }
+
+    });
+});
+if(!INF_MESSENGER_MIN) {
+    $(function () {
+        new FastClick(document.body);
+    });
+
+    $(document).ready(function () {
+        if($(".inf-message-wrap:last").length > 0)
+            $(".inf-content-chat").scrollTop($(".inf-message-wrap:last").offset().top);
+
+        $(".inf-friends-btn").click(function () {
+            $(".inf-left-side, #inf-messenger-wrap, #header").addClass('active');
+            $(".inf-content-side").addClass('unactive');
+
+            return false;
+        });
+
+        $(".inf-toggle-menu").click(function () {
+            if ($(window).width() >= 1200) {
+                $(".inf-toggle-menu, #inf-left-side, .logo-wrap").toggleClass('hide-large');
+            } else {
+                $(".inf-toggle-menu, #inf-left-side, .logo-wrap").toggleClass('active');
+            }
+            return false;
+        });
+
+        $(".inf-btn-show-user, .inf-right-side header").click(function () {
+            if ($("#inf-messenger-wrap .inf-right-side").hasClass('active')) {
+                $("#inf-messenger-wrap .inf-right-side, .inf-btn-show-user").removeClass("active");
+            } else {
+                $.get('?ACTION=GET_USER_DATA&sessid=' + BX.bitrix_sessid() + '&uid=' + $(".inf-get-user-message.active").attr('data-uid'), function (data) {
+                    arResult = $.parseJSON(data);
+                    if (!arResult.ERROR) {
+                        $('.inf-content-right .inf-user-info').html(arResult.HTML);
+                        $(".inf-content-right .inf-user-avatar a").css('background-image', $(".inf-header-right-btns .inf-btn-show-user > a").css('background-image'));
+                        $("#inf-messenger-wrap .inf-right-side, .inf-btn-show-user").addClass("active");
+                    }
+                });
+            }
+
+            return false;
+        });
+
+        $(document).on('click', '.inf-message-gethis',function(){
+            $(this).find('i').addClass("fa-refresh fa-spin").removeClass("fa-history");
+            $.get('?ACTION=GET_HISTORY&sessid=' + BX.bitrix_sessid() + '&last_id=' + $(this).attr('data-last-id') + '&chat=' + $(this).attr('data-chat-id'), function (data) {
+                arResult = $.parseJSON(data);
+                if (!arResult.ERROR) {
+                    $('.inf-message-gethis').after(arResult.HTML);
+                if(parseInt(arResult.LAST_ID) > 0)
+                    $('.inf-message-gethis').attr('data-last-id',arResult.LAST_ID);
+                else
+                    $('.inf-message-gethis').remove();
+                }
+                $('.inf-message-gethis i').addClass("fa-history").removeClass("fa-refresh fa-spin");
+            });
+            return false;
+        });
+
+
+        $(document).on('click', ".inf-get-user-message", function () {
+            $("#inf-messenger-wrap .inf-right-side, .inf-btn-show-user").removeClass("active");
+
+            $(".inf-user-wrap").removeClass('active');
+            $(".inf-left-side, #inf-messenger-wrap, #header").removeClass('active');
+            $(".inf-content-side").removeClass('unactive');
+            $(this).addClass('active').removeClass('new');
+
+            $(".inf-content-side header .inf-btn-show-user > a").css('background-image', $(this).find('.user-avatar').css('background-image')).parents('header').find('.user-login').html('<span>' + $(this).attr('data-login') + '</span> ' + $(this).attr('data-name'));
+
+            $('.inf-content-chat .inf-message-list').addClass('active').html('');
+            $.get('?ACTION=LAST_MESSAGE&sessid=' + BX.bitrix_sessid() + '&uid=' + $(this).attr('data-uid'), function (data) {
+                arResult = $.parseJSON(data);
+                if (!arResult.ERROR) {
+                    $('.inf-content-chat .inf-message-list').removeClass('active').html(arResult.HTML);
+                    if($(".inf-message-wrap:last").length > 0)
+                        $(".inf-content-chat").scrollTop($(".inf-message-wrap:last").offset().top);
+                } else {
+                    $('.inf-content-chat .inf-message-list').removeClass('active');
+                }
+
+            });
+
+            // s11 2017.11.20
+            // FIX empty UID
+            if($(this).attr('data-uid') == 0){
+                $(".inf-chat-input .input").prop( "disabled", true );
+                if($(".inf-chat-input .input").val().length > 0){
+                    $(".inf-chat-input .input").prop('saved-text', $(".inf-chat-input .input").val());
+                }
+                $(".inf-chat-input .input").val('Служебные сообщения');
+            }else{
+                $(".inf-chat-input .input").prop( "disabled", false );
+                $(".inf-chat-input .input").attr( "placeholder", '');
+                if($(".inf-chat-input .input").prop('saved-text') != undefined){
+                    $(".inf-chat-input .input").val($(".inf-chat-input .input").prop('saved-text'))
+                }else{
+                    $(".inf-chat-input .input").val('');
+                }
+            }
+            return false;
+        });
+
+        $(document).on('click', ".inf-get-user-message .user-name", function () {
+            window.open(
+                '//' + window.location.host + $(this).children().attr("href"),
+                '_blank'
+            );
+            return false;
+        });
+
+
+        $(document).on('click', '.inf-get-user-list', function () {
+            $('#inf-change-user-list').show();
+            $('.inf-user-list').append('<div class="inf-chat-loader"><i class="fa fa-refresh fa-spin fa-3x fa-fw margin-bottom"></i></div>').find('.inf-get-user-list').remove();
+
+            $('.inf-search-block-name').html($(this).find('.user-name').html());
+            if ($(this).attr('data-gid') == 'users') {
+                $("#inf-change-user-list > i").removeAttr('class').addClass('fa fa-star').html('');
+                $.get('?ACTION=GET_FRIENDS_LIST&sessid=' + BX.bitrix_sessid(), function (data) {
+                    $('.inf-user-list .inf-search-block').nextAll().remove();
+                    $('.inf-user-list').append(data);
+                });
+            } else if ($(this).attr('data-gid') == 'contact') {
+                $("#inf-change-user-list > i").removeAttr('class').addClass('fa fa-users').html('');
+                $.get('?ACTION=GET_LAST_CHATS&sessid=' + BX.bitrix_sessid(), function (data) {
+                    $('.inf-user-list .inf-search-block').nextAll().remove();
+                    $('.inf-user-list').append(data);
+                });
+            } else {
+                $("#inf-change-user-list > i").removeAttr('class').html($(this).children('.inf-user-avatar'))
+                $.get('?ACTION=GET_USER_FROM_GROUP&gid=' + $(this).attr('data-gid') + '&sessid=' + BX.bitrix_sessid(), function (data) {
+                    $('.inf-user-list .inf-search-block').nextAll().remove();
+                    $('.inf-user-list').append(data);
+                });
+            }
+
+            return false;
+        });
+
+
+        $("#main-left-menu a.root-item").click(function () {
+            $(this).toggleClass('active');
+
+        });
+
+        $(".inf-messenger-footer .inf-chat-input textarea").keydown(function (event) {
+
+            if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
+                $(".inf-messenger-footer div.inf-icon-send").click();
+                return false;
+            }
+        });
+        $(".inf-messenger-footer div.inf-icon-send").click(function () {
+            if (LOCK_MESSENGER)
+                return false;
+
+            if ($(".inf-messenger-footer .inf-chat-input textarea").val().length < 1) {
+                $(".inf-messenger-footer .inf-chat-input div").addClass('error');
+                setTimeout(function () {
+                    $(".inf-messenger-footer .inf-chat-input div").removeClass('error');
+                }, 300);
+
+                return false;
+            }
+            LOCK_MESSENGER = true;
+            /*var audio = new Audio('http://infostart.ru/bitrix/components/infostart/messenger/templates/.default/sound/send.mp3');
+             audio.play();*/
+            $.post('?ACTION=SEND_MESSAGE&sessid=' + BX.bitrix_sessid() + '&uid=' + $(".inf-get-user-message.active").attr('data-uid')  ,{ MESSAGE: $(".inf-messenger-footer .inf-chat-input textarea").val()}, function (data) {
+                arResult = $.parseJSON(data);
+                if (arResult.hasOwnProperty("ERROR")){
+                    $(".inf-messenger-footer .inf-chat-input div").html(arResult.ERROR);
+                    setTimeout(function () {
+                        $(".inf-messenger-footer .inf-chat-input div").html('&nbsp;');
+                    }, 3000);
+                }
+                $(".inf-messenger-footer .inf-chat-input textarea").val('');
+
+                LOCK_MESSENGER = false;
+            });
+
+            return false;
+        });
+
+        /*$('[contenteditable]').on('paste', function (e) {
+            setTimeout(function () {
+                $(".inf-messenger-footer .inf-chat-input div").text($(".inf-messenger-footer .inf-chat-input div").text());
+            },0);
+        });*/
+
+        $(".inf-messenger-footer .inf-chat-input textarea").keyup(function(event){
+          $(this).css('height','');
+          $(this).css('height',this.scrollHeight);
+
+        });
+
+        $(".inf-online-set input").change(function () {
+            $(".inf-user-list").toggleClass('online-only');
+        });
+
+        $(".inf-search-block-wrap .inf-search-btn").click(function () {
+            $(".inf-search-block").toggleClass('active-search');
+
+            return false;
+        });
+
+        $(".inf-left-side .inf-search-block  input[name=inf-search-users]").keyup(function (e) {
+            $(".inf-user-list .inf-user-wrap").removeClass('find');
+            $(".inf-user-list").removeClass('searching');
+            if ($(this).val().length > 0) {
+                $(".inf-user-list").addClass('searching');
+                $(".inf-user-list .inf-user-wrap[data-search*=" + $(this).val().toLowerCase() + "]").addClass('find');
+            }
+
+        });
+
+
+        $("#inf-change-user-list").click(function () {
+            $('.inf-search-block-name').html('Группы');
+            $('#inf-change-user-list').hide();
+            $.get('?ACTION=GET_SOCIAL_GROUPS&sessid=' + BX.bitrix_sessid(), function (data) {
+                arResult = $.parseJSON(data);
+                if (!arResult.ERROR) {
+                    $(".inf-user-list .inf-user-wrap").remove();
+                    $(".inf-user-list").append(arResult.HTML);
+                }
+            });
+
+            return false;
+        });
+    });
+
+
+    if (!!('ontouchstart' in window)) {
+
+        $(document).on('touchstart', '.inf-touch-enable, a', function (e) {
+            e.stopPropagation();
+        });
+        $(document).on('touchmove', '.inf-touch-enable, a', function (e) {
+            e.stopPropagation();
+        });
+        /*
+        $(document).bind("touchstart", function (e) {
+            e.preventDefault();
+        });
+        $(document).bind("touchmove", function (e) {
+            e.preventDefault();
+        });
+        */
+    }
+}
+/*----Notifications---*/
+if (("Notification" in window)){
+    if(Notification.permission != 'granted'){
+        $('.inf-left-side').prepend('<div class="inf-notify-block">'+
+        '<i class="fa fa-bell-o"></i><div>Получать оповещения о новых сообщениях <span>Включить оповещения</span></div>'+
+        '</div>');
+    }
+    $('.inf-notify-block span').on('click',function(){
+        Notification.requestPermission(function (permission) {
+            if (permission === "granted") {
+                 $('.inf-notify-block').remove();
+            }
+        });
+        return false;
+    });
+
+}
+
+$(document).on("click"," .ShowAllFriends",function(){
+    if(LOCK_MESSENGER)
+        return false;
+    LOCK_MESSENGER = true;
+    $(this).children('i').addClass("fa-refresh fa-spin").removeClass("fa-history");
+    $.get('?ACTION=GET_ALL_USERS&sessid=' + BX.bitrix_sessid(), function (data) {
+        $(".ShowAllFriends").remove();
+        $('.inf-user-list').append(data);
+        LOCK_MESSENGER = false;
+    });
+});
+$(document).ready(function () {
+    var Option = $("#header-search select").find("option[value='"+$("#header-search select").val()+"']");
+    if (Option.attr("data-action")){
+        $("#header-search form").attr("action",Option.attr("data-action"));
+    }else{
+        $("#header-search form").attr("action",$("#header-search input[type=text]").attr("data-action-"+$("#header-search select").val()));
+    }
+    if (Option.attr("data-name")){
+        $("#header-search input[type=text]").attr("name",Option.attr("data-name"));
+    }else{
+        $("#header-search input[type=text]").attr("name",$("#header-search input[type=text]").attr("data-name-"+$("#header-search select").val()));
+    }
+    $("#header-search select").change(function () {
+        var Option = $(this).find("option[value='"+$(this).val()+"']");
+        if (Option.attr("data-action")){
+            $("#header-search form").attr("action",Option.attr("data-action"));
+        }else{
+            $("#header-search form").attr("action",$("#header-search input[type=text]").attr("data-action-"+$(this).val()));
+        }
+        if (Option.attr("data-name")){
+            $("#header-search input[type=text]").attr("name",Option.attr("data-name"));
+        }else{
+            $("#header-search input[type=text]").attr("name",$("#header-search input[type=text]").attr("data-name-"+$(this).val()));
+        }
+
+
+    });
+
+    $("#inf-messenger-wrap").on("click", "#report-user-btn", function(){
+        var a = $(this);
+        var uid = $(this).attr("data-uid");
+        $.get('?ACTION=REPORT_USER&sessid=' + BX.bitrix_sessid() + '&uid=' + uid, function (data) {
+            var arResult = $.parseJSON(data);
+            if (!arResult.ERROR) {
+                a.parent().html('<p class="text-danger">Ваша жалоба зарегистирована. Номер обращения ' + arResult.OK + '.</p>');
+            }else{
+                a.parent().html('<p class="text-danger">Произошла ошибка, пожалуйста, обратитесь в техподдержку.</p>');
+            }
+        });
+    });
+});

@@ -1,0 +1,154 @@
+.main { width:982px; margin:0 auto; text-align:left;}
+
+#header {height:116px; margin-bottom:44px;}
+
+.col-1, .col-2, .col-3, .col-4 {float:left;}
+.container {width:100%; overflow:hidden;}
+
+/* ============================= AboutUs ===========================*/
+#i-AboutUs .col-1 {width:582px;}
+#i-AboutUs .col-2 {width:360px;}
+#i-AboutUs .col-1 .col-1 {width:271px;}
+#i-AboutUs .row .col-1 {width:965px;}
+/* ============================= Default ===========================*/
+#i-Default .col-1 {width:355px;}
+#i-Default .col-2 {width:587px;}
+#i-Default .col-3 {width:292px;}
+#i-Default .row .col-1 {width:350px;}
+#i-Default .row .col-2 {width:527px;padding-left:30px;}
+#i-Default .row .inner {min-height:270px; height:auto !important; height:270px;}
+/* ============================= Solutions ===========================*/
+#i-Solutions .col-1 {width:369px; }
+#i-Solutions .col-2 { width:573px; }
+
+#i-Solutions .row .col   { width:215px; }
+#i-Solutions .row .col a { margin-top:7px;}
+/* ============================= SiteMap ===========================*/
+#i-SiteMap .col-1 {width:471px;}
+#i-SiteMap .col-2 {width:471px;}
+#i-SiteMap .row .col-1 {width:471px;}
+#i-SiteMap .row .col-2 {width:471px;}
+/* ============================= Contacts ===========================*/
+#i-Contacts .col-1 {width:620px;}
+#i-Contacts .col-2 {width:322px;}
+#i-Contacts .col-1 .col-1 {width:285px;}
+#i-Contacts .row .col-1 {width:170px;}
+#i-Contacts .row .col-2 {width:702px;}
+/* ============================= Vacancies ===========================*/
+#i-Vacancies .col-1 {width:687px;}
+#i-Vacancies .col-2 {width:255px;}
+#i-Vacancies .row .col-1 {width:168px;}
+#i-Vacancies .row .col-2 {width:164px;}
+#i-Vacancies .row .col-3 {width:200px;}
+#i-Vacancies .row .col-4 {width:330px;}
+/* ============================= Teaching ===========================*/
+#i-Teaching .col-1, #i-Teaching .col-2, #i-Teaching .col-3 {margin-left:140px;//margin-left:100px;}
+#i-Teaching .reason-1, #i-Teaching .reason-2 {width:471px; float:left;}
+#i-Teaching .row .col-1 {width:287px; margin-left: 0px;}
+#i-Teaching .row .col-2 {width:550px; margin-left: 0px;}
+/* ============================= 1C-Default ===========================*/
+#i-1C-Default .col-1 {width:637px;}
+#i-1C-Default .col-2 {width:310px;}
+#i-1C-Default .col-1 .col-1 {width:271px;}
+#i-1C-Default .row .col-1 {width:300px;}
+#i-1C-Default .row .col-2 {width:300px;}
+#i-1C-Default .row .col-3 {width:300px;}
+/* ============================= 1C-HRM ===========================*/
+#i-1C-HRM .col-1 {width:471px;}
+#i-1C-HRM .col-2 {width:471px;}
+#i-1C-HRM .row .col-1 {width:480px;}
+#i-1C-HRM .row .col-2 {width:420px;}
+/* ============================= 1C-Accounting ===========================*/
+#i-1C-Accounting .col-1 {width:471px;}
+#i-1C-Accounting .col-2 {width:471px;}
+#i-1C-Accounting .row .col-1 {width:480px;}
+#i-1C-Accounting .row .col-2 {width:420px;}
+/* ============================= 1C-Trade ===========================*/
+#i-1C-Trade .col-1 {width:471px;}
+#i-1C-Trade .col-2 {width:471px;}
+#i-1C-Trade .row .col-1 {width:480px;}
+#i-1C-Trade .row .col-2 {width:420px;}
+/* ============================= 1C-Selling ===========================*/
+#i-1C-Selling .col-1 {width:471px;}
+#i-1C-Selling .col-2 {width:471px;}
+/* ============================= 1C-Services ===========================*/
+#i-1C-Services .col-1 {width:471px;}
+#i-1C-Services .col-2 {width:471px;}
+/* ============================= 1C-ITS ===========================*/
+#i-1C-ITS .col-1 {width:471px;}
+#i-1C-ITS .col-2 {width:471px;}
+#i-1C-ITS #check-btn { height:31px; padding-bottom:4px; }
+#i-1C-ITS .row .col-1 {width:465px;}
+#i-1C-ITS .row .col-2 {width:444px;}
+/* ============================= 1C-Upgrade ===========================*/
+#i-1C-Upgrade .col-1 {width:471px;}
+#i-1C-Upgrade .col-2 {width:471px;}
+#i-1C-Upgrade .row .col-1 {width:471px;}
+#i-1C-Upgrade .row .col-2 {width:471px;}
+/* ============================= 1C-12695 ===========================*/
+#i-1C-12695 .col-1 {width:471px;}
+#i-1C-12695 .col-2 {width:471px;}
+/* ============================= Exams-Default ===========================*/
+#i-Exams-Default .col-1 {width:590px;}
+#i-Exams-Default .col-2 {width:352px;}
+#i-Exams-Default .row .col-1 {width:287px;}
+#i-Exams-Default .row .col-2 {width:288px;}
+#i-Exams-Default .row .col-3 {width:325px;}
+/* ============================= Exams-AttPlatf-Default ===========================*/
+#i-Exams-AttPlatf-Default .row .col-1 {width:287px;}
+#i-Exams-AttPlatf-Default .row .col-2 {width:288px;}
+#i-Exams-AttPlatf-Default .row .col-3 {width:325px;}
+/* ============================= Exams-Results ===========================*/
+#i-Exams-Results .row .col-1 {width:287px;}
+#i-Exams-Results .row .col-2 {width:288px;}
+#i-Exams-Results .row .col-3 {width:287px;}
+/* ============================= SoftwareSelling ===========================*/
+#i-SoftwareSelling #About .col-1 {width:471px;}
+#i-SoftwareSelling #About .col-2 {width:471px;}
+#i-SoftwareSelling .col-1 {width:187px;}
+#i-SoftwareSelling .col-2 {width:755px;}
+#i-SoftwareSelling .row .col-1 {width:260px;}
+#i-SoftwareSelling .row .col-2 {width:287px;}
+#i-SoftwareSelling .row .col-3 {width:347px;}
+/* ============================= WebDevelopment ===========================*/
+#i-WebDevelopment .container h2 { padding:20px 0 10px; }
+#i-WebDevelopment .col-1 {width:447px;}
+#i-WebDevelopment .col-2 { width:492px; }
+#i-WebDevelopment .col-2 strong { color:#9EC002; }
+#i-WebDevelopment .row .col-1 {width:287px;}
+#i-WebDevelopment .row .col-2 {width:288px;}
+#i-WebDevelopment .row .col-3 {width:287px;}
+/* ============================= Misc-DemoApps ===========================*/
+#i-Misc-DemoApps .col-1 {width:450px;}
+#i-Misc-DemoApps .col-2 { width:490px; }
+/* ============================= Microsoft-Legalization ===========================*/
+#i-Microsoft-Legalization .col-1 {width:470px;}
+#i-Microsoft-Legalization .col-2 { width:470px; }
+/* ============================= LocalNets ===========================*/
+#i-LocalNets .col-1 {width:409px; }
+#i-LocalNets .col-2 { width:533px; }
+#i-LocalNets .row .col   { width:215px; }
+#i-LocalNets .row .col a { margin-top:7px;}
+/* ============================= AppDevelopment ===========================*/
+#i-AppDevelopment .col-1 {width:409px; }
+#i-AppDevelopment .col-2 { width:533px; }
+#i-AppDevelopment .row .col   { width:215px; }
+#i-AppDevelopment .row .col a { margin-top:7px;}
+/* ============================= Login ===========================*/
+#i-Login .col-1 {width:570px;}
+#i-Login .col-2 {width:340px;}
+/* ============================= PasswordRecovery ===========================*/
+#i-PasswordRecovery .col-1 {width:570px;}
+#i-PasswordRecovery .col-2 {width:340px;}
+/* ============================= DSP-Default ===========================*/
+#i-DSP-Default #Links .col-1 {width:460px;}
+#i-DSP-Default #Links .col-2 {width:460px;}
+/* ============================= CSO ===========================*/
+#i-CSO-Registration .col-1 {width:582px; padding-left:30px;}
+#i-CSO-Registration .col-2 {width:300px; padding-right:30px;}
+
+#i-CSO-OurCourse .col-1 {width:471px;}
+#i-CSO-OurCourse .col-2 {width:471px;}
+#i-CSO-OurCourse .row .col-1 {width: 287px;}
+#i-CSO-OurCourse .row .col-2 {width: 288px;}
+#i-CSO-OurCourse .row .col-3 {width: 287px;}

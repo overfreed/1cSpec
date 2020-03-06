@@ -1,0 +1,32 @@
+pre { text-align: left; font-family: courier new,courier; color: blue; }
+.p { color:#A52A2A; }
+.r { color:Red; font-family: courier new,courier;}
+.g { color:Green; font-family: courier new,courier;}
+.b { color:Blue; font-family: courier new,courier;}
+.black { color:Black; font-family: courier new,courier;}
+.bold {  font-weight:bold; color:#000; }
+.new { background-color:#FFF15F; }
+.highslide-caption { text-align:center; }
+
+#i-Exams-AttPlatf-Default #links
+{
+    background:url(i/golden-fish.jpg.ashx) no-repeat 0 0;
+    width:100%;
+    height:386px;
+    overflow:hidden;
+}
+#i-Exams-AttPlatf-Default #links #tags, #i-Exams-AttPlatf-Default #links #tags ul
+{
+	float:right;
+}
+
+a#ref-2-site
+{
+	background:url(i/i.gif.ashx) no-repeat 0 0;
+	float:left;
+	width:27px;
+	height:27px;
+	margin:4px 15px;
+}
+
+a#ref-2-site:hover { background-position:0 -55px; }
